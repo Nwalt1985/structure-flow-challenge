@@ -1,52 +1,23 @@
-org: 'nathan85'
-service: 'build-circle'
-frameworkVersion: '3'
+org: "nathan85"
+service: "build-circle"
+frameworkVersion: "3"
 useDotenv: true
 
 plugins:
   - serverless-plugin-typescript
-  - serverless-dynamodb-local
   - serverless-offline
-  - serverless-dynamodb-autoscaling
 
 custom:
   apiGatewayCaching:
     enabled: true
-  dynamodb:
-    stages:
-      - dev
-    start:
-      migrate: true
-      port: 8000
-      inMemory: true
-      heapInitial: 200m
-      heapMax: 1g
-      convertEmptyValues: true
 
 provider:
   name: aws
   stage: ${opt:stage, 'dev'}
   runtime: nodejs14.x
   region: eu-west-2
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - Fn::GetAtt: [buildCircleTable, Arn]
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-      Resource: '*'
-
   environment:
-    NODE_OPTIONS: '--enable-source-maps'
+    NODE_OPTIONS: "--enable-source-maps"
     CONFIG_REGION: ${self:provider.region}
     DYNAMODB_TABLE_NAME: buildCircleTable-${self:provider.stage}
 
@@ -59,19 +30,3 @@ functions:
           path: buildCircle
           method: GET
           cors: true
-
-resources:
-  Resources:
-    buildCircleTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: buildCircleTable-${self:provider.stage}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1

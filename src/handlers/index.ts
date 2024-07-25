@@ -1,12 +1,12 @@
-/* eslint-disable import/no-import-module-exports */
-import { StatusCodes } from 'http-status-codes';
-import { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
+import { StatusCodes } from "http-status-codes";
+import { APIGatewayProxyEvent, Callback, Context } from "aws-lambda";
 
-// eslint-disable-next-line func-names
-module.exports.handler = async function (event: APIGatewayProxyEvent, context: Context, callback: Callback<any>) {
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context,
+  callback: Callback<any>,
+) => {
   try {
-    const { sku } = event.queryStringParameters as any;
-
     const response = {
       statusCode: StatusCodes.OK,
       body: JSON.stringify("hello world", null, 2),
