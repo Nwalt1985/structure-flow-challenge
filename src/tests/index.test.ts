@@ -1,40 +1,43 @@
-import { handler } from "../handlers/battle/index";
-import { APIGatewayProxyEvent, Context, Callback } from "aws-lambda";
-import { StatusCodes } from "http-status-codes";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { handler } from "../handlers/battle";
 
-const event = {} as APIGatewayProxyEvent;
-const context = {} as Context;
-
-describe("handler", () => {
-  it("should return a successful response", async () => {
-    const callback: Callback<{
-      statusCode: number;
-      body: string | Error;
-    }> = (error, result) => {
-      expect(result).toEqual({
-        statusCode: StatusCodes.OK,
-        body: JSON.stringify("hello world", null, 2),
-      });
+describe("AWS API Gateway Endpoint", () => {
+  it("should return expected response when called with correct query parameters", async () => {
+    const queryStringParameters = {
+      hero: "hero",
+      villain: "villain",
     };
 
-    await handler(event, context, callback);
+    const event: APIGatewayProxyEvent = {
+      queryStringParameters,
+    } as any;
+
+    const result: APIGatewayProxyResult = await handler(event);
+
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toBe(
+      JSON.stringify({ message: "Hello friend" }, null, 2),
+    );
   });
 
-  it("should return an error response", async () => {
-    const callback: Callback<{
-      statusCode: number;
-      body: string | Error;
-    }> = (error, result) => {
-      expect(result).toEqual({
-        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-        body: expect.anything(),
-      });
-    };
+  it("should return an error response when called with bad query parameters", async () => {
+    const event: APIGatewayProxyEvent = {
+      queryStringParameters: {
+        hero: "unknownHero",
+        villain: "",
+      },
+    } as any;
 
-    jest.spyOn(JSON, "stringify").mockImplementationOnce(() => {
-      throw new Error("Test error");
-    });
+    const result: APIGatewayProxyResult = await handler(event);
 
-    await handler(event, context, callback);
+    expect(result.statusCode).toBe(500);
+    expect(result.body).toBe(
+      JSON.stringify(
+        { message: "Missing query parameters", name: "Error" },
+        null,
+        2,
+      ),
+    );
   });
 });

@@ -1,27 +1,51 @@
 import { StatusCodes } from "http-status-codes";
-import { APIGatewayProxyEvent, Callback, Context } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { GetQuerySchema } from "../../models/schemas";
+// import { battle } from "./battle";
 
 export const handler = async (
   event: APIGatewayProxyEvent,
-  context: Context,
-  callback: Callback<{
-    statusCode: number;
-    body: string | Error;
-  }>,
-) => {
+): Promise<APIGatewayProxyResult> => {
   try {
-    const response = {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify("hello world", null, 2),
-    };
+    GetQuerySchema.parse(event);
 
-    callback(null, response);
+    const { hero, villain } = event.queryStringParameters || {};
+
+    if (!hero || !villain) {
+      throw new Error("Missing query parameters");
+    }
+
+    // const result = battle(hero, villain);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: "Hello friend",
+        },
+        null,
+        2,
+      ),
+    };
   } catch (err) {
-    const response = {
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      body: err as Error,
-    };
+    let statusCode;
+    let message;
 
-    callback(null, response);
+    const error = err as Error;
+
+    switch (error.name) {
+      case "ZodError":
+        statusCode = StatusCodes.BAD_REQUEST;
+        message = error.message;
+        break;
+      default:
+        statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+        message = error.message;
+    }
+
+    return {
+      statusCode,
+      body: JSON.stringify({ message, name: error.name }, null, 2),
+    };
   }
 };
