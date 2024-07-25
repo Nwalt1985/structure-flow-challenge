@@ -8,9 +8,9 @@ Schema diagram
 
 ## Endpoints
 
-| Method | Stage | URL                        |
-| ------ | ----- | -------------------------- |
-| GET    | dev   | http://localhost:3000/dev/ |
+| Method | Stage | URL                              |
+| ------ | ----- | -------------------------------- |
+| GET    | dev   | http://localhost:3000/dev/battle |
 
 ## Lambda functions
 
@@ -22,18 +22,4 @@ Lambda function descriptions
 
 ```
 npm run start
-```
-
-**dynamodb-admin** https://www.npmjs.com/package/dynamodb-admin
-
-install gloablly
-
-```
-npm i -g dynamodb-admin
-```
-
-run
-
-```
-sls dynamodb install &&& npm run dynamodb-local
 ```

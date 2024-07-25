@@ -4,7 +4,10 @@ import { APIGatewayProxyEvent, Callback, Context } from "aws-lambda";
 export const handler = async (
   event: APIGatewayProxyEvent,
   context: Context,
-  callback: Callback<any>,
+  callback: Callback<{
+    statusCode: number;
+    body: string | Error;
+  }>,
 ) => {
   try {
     const response = {
@@ -16,7 +19,7 @@ export const handler = async (
   } catch (err) {
     const response = {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      body: err,
+      body: err as Error,
     };
 
     callback(null, response);
