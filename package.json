@@ -1,7 +1,7 @@
 {
-  "name": "build-circle",
+  "name": "serverless-boilerplate",
   "version": "1.0.0",
-  "description": "Build Circle tech challenge",
+  "description": "Serverless Boilerplate",
   "main": "serverless.ts",
   "scripts": {
     "prettier": "prettier --list-different './**/*.{js,ts}' --config '../.prettierrc.json' --ignore-path '../.prettierignore'",

@@ -1,5 +1,5 @@
 org: "nathan85"
-service: "build-circle"
+service: "serverless-boilerplate"
 frameworkVersion: "3"
 useDotenv: true
 
@@ -23,9 +23,9 @@ provider:
 functions:
   buildCircle:
     name: buildCircle-${self:provider.stage}
-    handler: ./src/handlers/battle/index.handler
+    handler: ./src/handlers/func1/index.handler
     events:
       - http:
-          path: battle
+          path: /func1
           method: GET
           cors: true

@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { handler } from "../handlers/func1/index";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { handler } from "../handlers/battle";
+import { StatusCodes } from "http-status-codes";
 
-describe("AWS API Gateway Endpoint", () => {
-  it("should return expected response when called with correct query parameters", async () => {
-    const queryStringParameters = {
-      hero: "hero",
-      villain: "villain",
-    };
-
-    const event: APIGatewayProxyEvent = {
-      queryStringParameters,
-    } as any;
+describe("handler", () => {
+  it("should return a 200 status code and a greeting message", async () => {
+    const event = {} as APIGatewayProxyEvent;
 
     const result: APIGatewayProxyResult = await handler(event);
 
@@ -21,23 +14,38 @@ describe("AWS API Gateway Endpoint", () => {
     );
   });
 
-  it("should return an error response when called with bad query parameters", async () => {
-    const event: APIGatewayProxyEvent = {
-      queryStringParameters: {
-        hero: "unknownHero",
-        villain: "",
-      },
-    } as any;
+  it("should handle ZodError and return a 400 status code", async () => {
+    const event = {} as APIGatewayProxyEvent;
+
+    const error = new Error("Invalid input");
+    error.name = "ZodError";
+
+    jest.spyOn(JSON, "stringify").mockImplementationOnce(() => {
+      throw error;
+    });
 
     const result: APIGatewayProxyResult = await handler(event);
 
-    expect(result.statusCode).toBe(500);
+    expect(result.statusCode).toBe(StatusCodes.BAD_REQUEST);
     expect(result.body).toBe(
-      JSON.stringify(
-        { message: "Missing query parameters", name: "Error" },
-        null,
-        2,
-      ),
+      JSON.stringify({ message: error.message, name: error.name }, null, 2),
+    );
+  });
+
+  it("should handle generic errors and return a 500 status code", async () => {
+    const event = {} as APIGatewayProxyEvent;
+
+    const error = new Error("Something went wrong");
+
+    jest.spyOn(JSON, "stringify").mockImplementationOnce(() => {
+      throw error;
+    });
+
+    const result: APIGatewayProxyResult = await handler(event);
+
+    expect(result.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    expect(result.body).toBe(
+      JSON.stringify({ message: error.message, name: error.name }, null, 2),
     );
   });
 });
