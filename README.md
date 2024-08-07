@@ -10,7 +10,7 @@ Schema diagram
 
 | Method | Stage | URL                              |
 | ------ | ----- | -------------------------------- |
-| GET    | dev   | http://localhost:3000/dev/battle |
+| GET    | dev   | http://localhost:3000/dev/func1 |
 
 ## Lambda functions
 
