@@ -94,7 +94,7 @@ A serverless application built with AWS Lambda, TypeScript, and MongoDB for mana
 - Add a loadbalancer in front of the API Gateway
 - Add a WAF to the API Gateway for added security
 
-## Code imporements & functional improvements
+## Code improvements & functional improvements
 
 - Add a function to get all the company users
 - Add a function to get the company user by id
