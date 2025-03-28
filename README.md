@@ -93,3 +93,12 @@ A serverless application built with AWS Lambda, TypeScript, and MongoDB for mana
 - Add JSDoc comments & Swagger docs for API documentation
 - Add a loadbalancer in front of the API Gateway
 - Add a WAF to the API Gateway for added security
+
+## Code imporements & functional improvements
+
+- Add a function to get all the company users
+- Add a function to get the company user by id
+- Add a function to get the company user by email
+- Add multiple users to a company
+- Add a function to remove multiple users from a company
+- When adding/removing multiple users, make sure to update the totalEmployees field by user array length

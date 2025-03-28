@@ -1,7 +1,7 @@
 {
   "name": "structure-flow",
   "version": "1.0.0",
-  "description": "Serverless Boilerplate",
+  "description": "Structure Flow API",
   "scripts": {
     "prettier": "prettier --list-different './**/*.{js,ts}' --config '../.prettierrc.json' --ignore-path '../.prettierignore'",
     "prettier-write": "prettier --list-different './**/*.{js,ts}' --config '../.prettierrc.json' --ignore-path '../.prettierignore' --write",
