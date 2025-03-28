@@ -102,3 +102,5 @@ A serverless application built with AWS Lambda, TypeScript, and MongoDB for mana
 - Add multiple users to a company
 - Add a function to remove multiple users from a company
 - When adding/removing multiple users, make sure to update the totalEmployees field by user array length
+- consider adding pool of connections to the db to improve performance
+- add schema validation at the gateway level instead of in the handler
