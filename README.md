@@ -83,19 +83,19 @@ A serverless application built with AWS Lambda, TypeScript, and MongoDB for mana
 }
 ```
 
-## Improvements
+## Infrastructure Improvements
 
-- More tests (ran out of time)
 - Add an API key & use rate limiting
 - Set VPC
 - Add CI/CD pipeline
 - Use a queing system (AWS SQS) & DLQ for updating the companies/users
-- Add JSDoc comments & Swagger docs for API documentation
 - Add a loadbalancer in front of the API Gateway
 - Add a WAF to the API Gateway for added security
 
 ## Code improvements & functional improvements
 
+- Add JSDoc comments & Swagger docs for API documentation
+- More tests (ran out of time)
 - Add a function to get all the company users
 - Add a function to get the company user by id
 - Add a function to get the company user by email
