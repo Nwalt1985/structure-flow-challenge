@@ -1,12 +1,17 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { handler } from "../handlers/createCompany/index";
-import { connectToMongoDB, disconnectFromMongoDB } from "../db/config";
+import {
+  connectToMongoDB,
+  disconnectFromMongoDB,
+  getMongoDBDatabase,
+} from "../db/config";
 import { StatusCodes } from "http-status-codes";
 
 // Mock the MongoDB related functions
 jest.mock("../db/config", () => ({
   connectToMongoDB: jest.fn(),
   disconnectFromMongoDB: jest.fn(),
+  getMongoDBDatabase: jest.fn(),
 }));
 
 describe("createCompany handler", () => {
@@ -14,6 +19,7 @@ describe("createCompany handler", () => {
   const mockInsertOne = jest.fn();
   const mockCollection = {
     insertOne: mockInsertOne,
+    findOne: jest.fn().mockResolvedValue(null), // Mock findOne to return null (company doesn't exist)
   };
   const mockDb = {
     collection: jest.fn().mockReturnValue(mockCollection),
@@ -27,6 +33,7 @@ describe("createCompany handler", () => {
     // Reset all mocks before each test
     jest.clearAllMocks();
     (connectToMongoDB as jest.Mock).mockResolvedValue(mockClient);
+    (getMongoDBDatabase as jest.Mock).mockResolvedValue("test-db");
   });
 
   it("should create a company successfully", async () => {
